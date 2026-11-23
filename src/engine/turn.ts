@@ -191,6 +191,52 @@ export function resolveTurn(state: GameState, input: ActionInput): ResolveResult
     }
 
     messages.push(openResult.summary);
+  } else if (action.type === 'travel') {
+    // Travel along Highway 404
+    const fuelCost = 8;
+    if (currentState.vehicle.fuel < fuelCost) {
+      messages.push('⚠️ Van fuel is too low to drive! Refuel using a fuel canister first.');
+    } else {
+      currentState.vehicle.fuel -= fuelCost;
+      currentState.vehicle.wear = Math.min(100, currentState.vehicle.wear + 1);
+      const travelMilestones = [
+        'Highway 404 (Kilometer Zero)',
+        'Kilometer 4 — Decaying Tollbooth Overpass',
+        'Kilometer 11 — Rust River Wash & Deserted Diner',
+        'Kilometer 19 — Overturned Fuel Tanker & Junction',
+        'Kilometer 28 — Sunken Military Convoy & Barricade',
+        'Kilometer 36 — The Acid Fog Hollow',
+        'Kilometer 45 — Outpost 7 Service Station',
+      ];
+      const curIdx = travelMilestones.indexOf(currentState.environment.locationName);
+      const nextIdx = Math.min(travelMilestones.length - 1, (curIdx === -1 ? 0 : curIdx) + 1);
+      currentState.environment.locationName = travelMilestones[nextIdx]!;
+      messages.push(`🚐 Traveled forward along Highway 404 to ${currentState.environment.locationName} (-${fuelCost} Fuel).`);
+    }
+  } else if (action.params?.refuel) {
+    const fuelItemIdx = currentState.inventory.items.findIndex((i) => i.name.toLowerCase().includes('fuel'));
+    if (fuelItemIdx !== -1) {
+      const fuelItem = currentState.inventory.items[fuelItemIdx]!;
+      currentState.vehicle.fuel = Math.min(currentState.vehicle.maxFuel, currentState.vehicle.fuel + 40);
+      messages.push(`⛽ Refueled van with ${fuelItem.name}: Fuel restored to ${currentState.vehicle.fuel}/${currentState.vehicle.maxFuel}!`);
+    }
+  } else if (action.params?.stash) {
+    // Stash heavy items into van storage to relieve encumbrance
+    currentState.inventory.items = currentState.inventory.items.map((item) => {
+      if (item.weight > 10) {
+        return {
+          ...item,
+          weight: Math.round(item.weight * 0.1 * 10) / 10, // Stashed in van
+          description: `${item.description} [Secured in Van Cargo Bay]`,
+        };
+      }
+      return item;
+    });
+    messages.push('📦 Secured heavy canisters and bulk metal into the van cargo hold. Personal carry weight normalized!');
+  } else if (action.type === 'rest') {
+    currentState.player.meters.energy = Math.min(100, currentState.player.meters.energy + 25);
+    currentState.player.meters.fatigue = Math.max(0, currentState.player.meters.fatigue - 20);
+    messages.push('💤 Rested inside the cabin: Energy restored (+25), Fatigue reduced (-20).');
   }
 
   // 2. Perform any Stat Checks (from freeform action or choices)

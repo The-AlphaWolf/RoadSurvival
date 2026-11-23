@@ -19,7 +19,8 @@ export class GeminiGameClient {
     const key =
       config.apiKey ||
       (typeof window !== 'undefined' ? localStorage.getItem('ROAD_SURVIVAL_GEMINI_KEY') || envKey : envKey);
-    this.modelName = config.modelName || (import.meta as any).env?.VITE_GEMINI_MODEL || 'gemini-2.5-flash';
+    const storedModel = typeof window !== 'undefined' ? localStorage.getItem('ROAD_SURVIVAL_GEMINI_MODEL') || '' : '';
+    this.modelName = config.modelName || storedModel || (import.meta as any).env?.VITE_GEMINI_MODEL || 'gemini-1.5-flash';
 
     if (key && key.trim().length > 0) {
       try {
@@ -40,6 +41,17 @@ export class GeminiGameClient {
     } else {
       this.ai = null;
     }
+  }
+
+  public setModelName(model: string): void {
+    this.modelName = model;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('ROAD_SURVIVAL_GEMINI_MODEL', model);
+    }
+  }
+
+  public getModelName(): string {
+    return this.modelName;
   }
 
   public hasApiKey(): boolean {
