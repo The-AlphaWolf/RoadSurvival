@@ -7,6 +7,7 @@ import { createInitialClock } from '../engine/clock';
 import { createInitialVehicle } from '../engine/vehicle';
 import { rollStarterChest } from '../engine/loot';
 import { getStarterInventoryItems } from '../engine/data/items';
+import { getMockNarrateResponse } from '../ai/mock';
 
 // IndexedDB storage adapter using idb-keyval
 const idbStorage = {
@@ -27,7 +28,7 @@ export function createNewGameInitialState(): GameState {
   const initialVehicle = createInitialVehicle();
   const clock = createInitialClock();
 
-  return {
+  const state: GameState = {
     version: '0.1.0',
     player: {
       name: 'Qing Zhou',
@@ -110,6 +111,13 @@ export function createNewGameInitialState(): GameState {
     },
     rngState: 1337,
   };
+
+  const initialNarrative = getMockNarrateResponse(state, []);
+  state.flags.currentScenario = initialNarrative.narrative;
+  state.flags.currentCommentary = initialNarrative.commentary || null;
+  state.flags.currentChoices = initialNarrative.choices;
+
+  return state;
 }
 
 export type GameTheme = 'wasteland' | 'terminal' | 'graphite' | 'classic';

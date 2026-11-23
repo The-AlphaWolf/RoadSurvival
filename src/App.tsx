@@ -26,21 +26,21 @@ export const App: React.FC = () => {
     document.documentElement.setAttribute('data-theme', theme);
   }, [theme]);
 
-  // Initialize Day 1 Arrival Scene if starting fresh
+  // Ensure arrival scene and choices are present (recovers seamlessly if any state has empty choices)
   useEffect(() => {
-    if (gameState.history.length === 0 && (!gameState.flags.currentChoices || gameState.flags.currentChoices.length === 0)) {
+    if (!gameState.flags.currentChoices || gameState.flags.currentChoices.length === 0) {
       const initialNarrative = getMockNarrateResponse(gameState, []);
       setGameState({
         ...gameState,
         flags: {
           ...gameState.flags,
-          currentScenario: initialNarrative.narrative,
-          currentCommentary: initialNarrative.commentary || null,
+          currentScenario: gameState.flags.currentScenario || initialNarrative.narrative,
+          currentCommentary: gameState.flags.currentCommentary || initialNarrative.commentary || null,
           currentChoices: initialNarrative.choices,
         },
       });
     }
-  }, []);
+  }, [gameState.flags.currentChoices]);
 
   const handleSelectChoice = (choice: GameChoice) => {
     executeAction(choice.text, choice.action);
@@ -65,7 +65,6 @@ export const App: React.FC = () => {
         onOpenSettings={() => setIsSettingsOpen(true)}
         onNewGame={() => {
           resetNewGame();
-          window.location.reload();
         }}
       />
 
