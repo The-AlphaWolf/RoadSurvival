@@ -17,9 +17,14 @@ import './styles/panels.css';
 import './styles/animations.css';
 
 export const App: React.FC = () => {
-  const { gameState, setGameState, resetNewGame } = useGameStore();
+  const { gameState, theme, setGameState, resetNewGame } = useGameStore();
   const { executeAction, activeRollOverlay, dismissRollOverlay } = useGameTurn();
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  // Sync theme with html root attribute
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   // Initialize Day 1 Arrival Scene if starting fresh
   useEffect(() => {

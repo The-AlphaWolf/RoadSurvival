@@ -4,9 +4,10 @@ import { getLuckDescriptor } from '../../engine/constants';
 import { getSpecialChargeStatus } from '../../engine/clock';
 
 export const PlayerStatus: React.FC = () => {
-  const { gameState } = useGameStore();
+  const { gameState, theme } = useGameStore();
   const { player, clock } = gameState;
   const { meters, stats, talent } = player;
+  const isClassic = theme === 'classic';
 
   const specialStatus = getSpecialChargeStatus(
     clock.totalElapsedMinutes,
@@ -14,19 +15,21 @@ export const PlayerStatus: React.FC = () => {
   );
 
   return (
-    <div className="panel-container" style={{ marginBottom: '12px' }}>
+    <div className="panel-container" style={{ marginBottom: '8px' }}>
       <div className="panel-header">
-        <span>🧍 {player.name} (Lv. {player.level})</span>
-        <span style={{ fontSize: '0.75rem', color: '#9aa3be' }}>
-          XP: {player.experience}/{player.nextLevelExperience}
+        <span>
+          {isClassic ? '🧍 ' : ''}{player.name} — Lv. {player.level}
+        </span>
+        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+          XP {player.experience}/{player.nextLevelExperience}
         </span>
       </div>
 
       <div className="panel-body">
-        {/* Survival Meters */}
-        <div style={{ marginBottom: '12px' }}>
+        {/* Survival Gauges */}
+        <div style={{ marginBottom: '10px' }}>
           <div className="meter-row">
-            <span>❤️ Health</span>
+            <span className="meter-label">{isClassic ? '❤️ HP' : 'Health'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
@@ -36,11 +39,11 @@ export const PlayerStatus: React.FC = () => {
                 }}
               />
             </div>
-            <span>{meters.health}/{meters.maxHealth}</span>
+            <span className="meter-value">{meters.health}/{meters.maxHealth}</span>
           </div>
 
           <div className="meter-row">
-            <span>⚡ Energy</span>
+            <span className="meter-label">{isClassic ? '⚡ Energy' : 'Energy'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
@@ -50,11 +53,11 @@ export const PlayerStatus: React.FC = () => {
                 }}
               />
             </div>
-            <span>{meters.energy}%</span>
+            <span className="meter-value">{meters.energy}%</span>
           </div>
 
           <div className="meter-row">
-            <span>🍗 Hunger</span>
+            <span className="meter-label">{isClassic ? '🍗 Hunger' : 'Hunger'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
@@ -64,11 +67,11 @@ export const PlayerStatus: React.FC = () => {
                 }}
               />
             </div>
-            <span>{meters.hunger}%</span>
+            <span className="meter-value">{meters.hunger}%</span>
           </div>
 
           <div className="meter-row">
-            <span>💧 Thirst</span>
+            <span className="meter-label">{isClassic ? '💧 Thirst' : 'Thirst'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
@@ -78,11 +81,11 @@ export const PlayerStatus: React.FC = () => {
                 }}
               />
             </div>
-            <span>{meters.thirst}%</span>
+            <span className="meter-value">{meters.thirst}%</span>
           </div>
 
           <div className="meter-row">
-            <span>🥱 Fatigue</span>
+            <span className="meter-label">{isClassic ? '🥱 Fatigue' : 'Fatigue'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
@@ -92,11 +95,11 @@ export const PlayerStatus: React.FC = () => {
                 }}
               />
             </div>
-            <span>{meters.fatigue}%</span>
+            <span className="meter-value">{meters.fatigue}%</span>
           </div>
 
           <div className="meter-row">
-            <span>🧠 Sanity</span>
+            <span className="meter-label">{isClassic ? '🧠 Sanity' : 'Sanity'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
@@ -106,55 +109,66 @@ export const PlayerStatus: React.FC = () => {
                 }}
               />
             </div>
-            <span>{meters.sanity}%</span>
+            <span className="meter-value">{meters.sanity}%</span>
           </div>
         </div>
 
-        {/* Talent Section */}
+        {/* Talent Diagnostics Box */}
         <div
           style={{
-            background: 'rgba(163, 53, 238, 0.1)',
-            border: '1px solid rgba(163, 53, 238, 0.3)',
-            borderRadius: '6px',
+            background: 'var(--bg-surface-elevated)',
+            border: '1px solid var(--border-bright)',
+            borderRadius: 'var(--radius-md)',
             padding: '8px 10px',
-            marginBottom: '12px',
+            marginBottom: '10px',
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontWeight: 700, color: '#d8b4fe', fontSize: '0.8rem' }}>
-              ✨ SSS Talent: "Upgrade"
+            <span style={{ fontWeight: 600, color: 'var(--text-accent)', fontSize: '0.78rem' }}>
+              {isClassic ? '✨ ' : ''}SSS Talent: Upgrade
             </span>
             <span
               style={{
                 fontSize: '0.75rem',
-                fontWeight: 700,
-                color: talent.charges > 0 ? '#1eff00' : '#ef4444',
+                fontWeight: 600,
+                color: talent.charges > 0 ? '#22c55e' : '#ef4444',
+                fontFamily: 'var(--font-mono)',
               }}
             >
-              Charges: {talent.charges}/6
+              {talent.charges}/6 Charges
             </span>
           </div>
-          <div style={{ fontSize: '0.72rem', color: '#9aa3be', marginTop: '4px' }}>
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '3px' }}>
             {specialStatus.available ? (
-              <span style={{ color: '#ffd700' }}>⭐ Special (+3 Tiers): READY</span>
+              <span style={{ color: 'var(--text-accent)' }}>
+                {isClassic ? '⭐ ' : '● '}Special 3-Tier Jump: Ready
+              </span>
             ) : (
-              <span>⏳ Special Cooldown: {specialStatus.remainingHours}h remaining</span>
+              <span>Special Cooldown: {specialStatus.remainingHours}h</span>
             )}
           </div>
         </div>
 
-        {/* Attributes & Luck */}
-        <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', marginBottom: '8px' }}>
-            <div>STR: {stats.strength}</div>
-            <div>AGI: {stats.agility}</div>
-            <div>END: {stats.endurance}</div>
-            <div>INT: {stats.intelligence}</div>
-            <div>PER: {stats.perception}</div>
-            <div>CHA: {stats.charm}</div>
+        {/* Core Attributes */}
+        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr',
+              gap: '4px',
+              fontFamily: 'var(--font-mono)',
+              marginBottom: '6px',
+            }}
+          >
+            <div>STR {stats.strength}</div>
+            <div>AGI {stats.agility}</div>
+            <div>END {stats.endurance}</div>
+            <div>INT {stats.intelligence}</div>
+            <div>PER {stats.perception}</div>
+            <div>CHA {stats.charm}</div>
           </div>
-          <div style={{ fontStyle: 'italic', color: '#60a5fa', fontSize: '0.75rem' }}>
-            🍀 Luck: "{getLuckDescriptor(stats.hiddenLuck)}"
+          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+            {isClassic ? '🍀 ' : 'Fortune: '}"{getLuckDescriptor(stats.hiddenLuck)}"
           </div>
         </div>
       </div>

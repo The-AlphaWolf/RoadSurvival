@@ -112,8 +112,11 @@ export function createNewGameInitialState(): GameState {
   };
 }
 
+export type GameTheme = 'wasteland' | 'terminal' | 'graphite' | 'classic';
+
 interface GameStoreState {
   gameState: GameState;
+  theme: GameTheme;
   isStreaming: boolean;
   streamedText: string;
   isProcessingTurn: boolean;
@@ -121,6 +124,7 @@ interface GameStoreState {
 
   // Actions
   setGameState: (state: GameState) => void;
+  setTheme: (theme: GameTheme) => void;
   resetNewGame: () => void;
   setStreamingText: (text: string) => void;
   setIsStreaming: (streaming: boolean) => void;
@@ -132,12 +136,14 @@ export const useGameStore = create<GameStoreState>()(
   persist(
     (set) => ({
       gameState: createNewGameInitialState(),
+      theme: 'wasteland',
       isStreaming: false,
       streamedText: '',
       isProcessingTurn: false,
       errorMessage: null,
 
       setGameState: (newState) => set({ gameState: newState }),
+      setTheme: (theme) => set({ theme }),
       resetNewGame: () => set({ gameState: createNewGameInitialState(), streamedText: '' }),
       setStreamingText: (text) => set({ streamedText: text }),
       setIsStreaming: (isStreaming) => set({ isStreaming }),
@@ -147,7 +153,7 @@ export const useGameStore = create<GameStoreState>()(
     {
       name: 'road_survival_game_state_v1',
       storage: createJSONStorage(() => idbStorage),
-      partialize: (state) => ({ gameState: state.gameState }),
+      partialize: (state) => ({ gameState: state.gameState, theme: state.theme }),
     }
   )
 );

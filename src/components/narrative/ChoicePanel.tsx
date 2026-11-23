@@ -11,8 +11,9 @@ export const ChoicePanel: React.FC<ChoicePanelProps> = ({
   onSelectChoice,
   onSubmitCustomAction,
 }) => {
-  const { gameState, isProcessingTurn, errorMessage } = useGameStore();
+  const { gameState, theme, isProcessingTurn, errorMessage } = useGameStore();
   const [customText, setCustomText] = useState('');
+  const isClassic = theme === 'classic';
 
   const choices = gameState.flags.currentChoices || [];
 
@@ -26,15 +27,15 @@ export const ChoicePanel: React.FC<ChoicePanelProps> = ({
   const getRiskColor = (risk: string) => {
     switch (risk) {
       case 'low':
-        return '#10b981';
+        return '#16a34a';
       case 'medium':
-        return '#f59e0b';
+        return '#d97706';
       case 'high':
-        return '#ef4444';
+        return '#dc2626';
       case 'extreme':
-        return '#a855f7';
+        return '#9333ea';
       default:
-        return '#9aa3be';
+        return 'var(--text-muted)';
     }
   };
 
@@ -43,11 +44,11 @@ export const ChoicePanel: React.FC<ChoicePanelProps> = ({
       {errorMessage && (
         <div
           style={{
-            background: 'rgba(239, 68, 68, 0.15)',
-            border: '1px solid #ef4444',
+            background: 'rgba(220, 38, 38, 0.1)',
+            border: '1px solid #dc2626',
             color: '#fca5a5',
-            padding: '8px 12px',
-            borderRadius: '4px',
+            padding: '6px 10px',
+            borderRadius: 'var(--radius-sm)',
             fontSize: '0.8rem',
           }}
         >
@@ -55,7 +56,7 @@ export const ChoicePanel: React.FC<ChoicePanelProps> = ({
         </div>
       )}
 
-      {/* 6 Meaningful Choices Grid */}
+      {/* 6 Tactical Choices Grid */}
       <div className="choice-grid">
         {choices.map((choice, idx) => (
           <button
@@ -64,33 +65,41 @@ export const ChoicePanel: React.FC<ChoicePanelProps> = ({
             disabled={isProcessingTurn}
             onClick={() => onSelectChoice(choice)}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <span style={{ fontWeight: 600, fontSize: '0.82rem' }}>
-                {idx + 1}. {choice.text}
+            <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'baseline' }}>
+              <span style={{ fontWeight: 500, fontSize: '0.82rem' }}>
+                <span style={{ color: 'var(--text-muted)', marginRight: '6px', fontFamily: 'var(--font-mono)' }}>
+                  [{String(idx + 1).padStart(2, '0')}]
+                </span>
+                {choice.text}
               </span>
               <span
                 style={{
-                  fontSize: '0.68rem',
-                  fontWeight: 700,
+                  fontSize: '0.65rem',
+                  fontWeight: 600,
                   textTransform: 'uppercase',
                   color: getRiskColor(choice.risk),
                   marginLeft: '8px',
+                  fontFamily: 'var(--font-mono)',
                 }}
               >
-                [{choice.risk}]
+                {choice.risk}
               </span>
             </div>
-            {choice.hint && <div className="choice-hint">💡 {choice.hint}</div>}
+            {choice.hint && (
+              <div className="choice-hint">
+                {isClassic ? '💡 ' : ''}{choice.hint}
+              </div>
+            )}
           </button>
         ))}
       </div>
 
-      {/* Custom Action (Section 18.12) */}
+      {/* Custom Action Row */}
       <form onSubmit={handleCustomSubmit} className="custom-action-row">
         <input
           type="text"
           className="custom-input"
-          placeholder="✍️ Custom Action: type anything you want to attempt..."
+          placeholder={isClassic ? "✍️ Custom Action: type anything you want to attempt..." : "Type custom action to execute..."}
           value={customText}
           disabled={isProcessingTurn}
           onChange={(e) => setCustomText(e.target.value)}
@@ -101,7 +110,7 @@ export const ChoicePanel: React.FC<ChoicePanelProps> = ({
           disabled={!customText.trim() || isProcessingTurn}
           style={{ whiteSpace: 'nowrap' }}
         >
-          {isProcessingTurn ? 'Resolving...' : 'Act ➔'}
+          {isProcessingTurn ? 'Resolving...' : isClassic ? 'Act ➔' : 'Execute'}
         </button>
       </form>
     </div>

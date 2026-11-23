@@ -1,14 +1,8 @@
-/* Animations */
-@keyframes pulseGlow {
-  0% { box-shadow: 0 0 5px rgba(163, 53, 238, 0.2); }
-  50% { box-shadow: 0 0 15px rgba(163, 53, 238, 0.5); }
-  100% { box-shadow: 0 0 5px rgba(163, 53, 238, 0.2); }
-}
+/* ==========================================================================
+   UNSLOP MOTION & SUBTLE CATHODE/TELEMETRY EFFECTS
+   ========================================================================== */
 
-.glow-purple {
-  animation: pulseGlow 2s infinite ease-in-out;
-}
-
+/* Cursor */
 @keyframes cursorBlink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -16,22 +10,37 @@
 
 .streaming-cursor {
   display: inline-block;
-  width: 8px;
-  height: 15px;
+  width: 7px;
+  height: 14px;
   background-color: var(--text-accent);
   vertical-align: middle;
   margin-left: 4px;
-  animation: cursorBlink 0.8s infinite;
+  animation: cursorBlink 0.9s infinite cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@keyframes diceShake {
-  0% { transform: rotate(0deg); }
-  25% { transform: rotate(-10deg); }
-  50% { transform: rotate(10deg); }
-  75% { transform: rotate(-5deg); }
-  100% { transform: rotate(0deg); }
+/* CRT Scanlines for Tactical Terminal Theme */
+[data-theme="terminal"] .narrative-scroll {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
 }
 
-.dice-shake {
-  animation: diceShake 0.4s ease-in-out;
+/* Roll notification subtle slide-in */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up {
+  animation: slideUp 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }

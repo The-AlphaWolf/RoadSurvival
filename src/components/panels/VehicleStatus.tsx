@@ -3,15 +3,16 @@ import { useGameStore } from '../../store/gameStore';
 import { RARITY_DISPLAY } from '../../engine/constants';
 
 export const VehicleStatus: React.FC = () => {
-  const { gameState } = useGameStore();
+  const { gameState, theme } = useGameStore();
   const { vehicle } = gameState;
+  const isClassic = theme === 'classic';
 
   return (
-    <div className="panel-container" style={{ marginBottom: '12px' }}>
+    <div className="panel-container" style={{ marginBottom: '8px' }}>
       <div className="panel-header">
-        <span>🚐 {vehicle.name}</span>
-        <span style={{ fontSize: '0.75rem', color: '#9aa3be' }}>
-          Paths: {vehicle.activePathsCount}/12
+        <span>{isClassic ? '🚐 ' : ''}{vehicle.name}</span>
+        <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+          Paths {vehicle.activePathsCount}/12
         </span>
       </div>
 
@@ -19,51 +20,51 @@ export const VehicleStatus: React.FC = () => {
         {/* Vehicle Health & Fuel */}
         <div style={{ marginBottom: '10px' }}>
           <div className="meter-row">
-            <span>🛡️ Durability</span>
+            <span className="meter-label">{isClassic ? '🛡️ Hull' : 'Durability'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
                 style={{
                   width: `${vehicle.durability}%`,
-                  background: '#10b981',
+                  background: '#16a34a',
                 }}
               />
             </div>
-            <span>{vehicle.durability}%</span>
+            <span className="meter-value">{vehicle.durability}%</span>
           </div>
 
           <div className="meter-row">
-            <span>⛽ Fuel</span>
+            <span className="meter-label">{isClassic ? '⛽ Fuel' : 'Fuel'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
                 style={{
                   width: `${(vehicle.fuel / vehicle.maxFuel) * 100}%`,
-                  background: '#3b82f6',
+                  background: '#0284c7',
                 }}
               />
             </div>
-            <span>{vehicle.fuel}/{vehicle.maxFuel}</span>
+            <span className="meter-value">{vehicle.fuel}/{vehicle.maxFuel}</span>
           </div>
 
           <div className="meter-row">
-            <span>⚙️ Wear</span>
+            <span className="meter-label">{isClassic ? '⚙️ Wear' : 'Wear'}</span>
             <div className="meter-bar-track">
               <div
                 className="meter-bar-fill"
                 style={{
                   width: `${vehicle.wear}%`,
-                  background: '#f59e0b',
+                  background: '#d97706',
                 }}
               />
             </div>
-            <span>{vehicle.wear}%</span>
+            <span className="meter-value">{vehicle.wear}%</span>
           </div>
         </div>
 
-        {/* 12 Components Mini Grid */}
-        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 600 }}>
-          COMPONENTS (12)
+        {/* 12 Components Grid */}
+        <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px', fontWeight: 500 }}>
+          Installed Components
         </div>
         <div
           style={{
@@ -79,15 +80,24 @@ export const VehicleStatus: React.FC = () => {
               <div
                 key={key}
                 style={{
-                  padding: '3px 6px',
+                  padding: '4px 6px',
                   background: 'var(--bg-surface-elevated)',
-                  borderRadius: '4px',
+                  borderRadius: 'var(--radius-sm)',
                   display: 'flex',
                   justifyContent: 'space-between',
+                  alignItems: 'center',
                 }}
               >
                 <span>{comp.name}</span>
-                <span style={{ color: rInfo.color }}>{rInfo.emoji}</span>
+                <span
+                  style={{
+                    color: rInfo.color,
+                    fontSize: isClassic ? '0.75rem' : '0.68rem',
+                    fontWeight: 600,
+                  }}
+                >
+                  {isClassic ? rInfo.emoji : comp.rarity.toUpperCase().slice(0, 3)}
+                </span>
               </div>
             );
           })}

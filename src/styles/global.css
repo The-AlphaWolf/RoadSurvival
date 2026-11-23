@@ -1,11 +1,155 @@
-:root {
-  /* Dark Theme Palette */
+/* ==========================================================================
+   ROAD SURVIVAL — THEME SYSTEM (4 UNSLOPPED THEMES)
+   ========================================================================== */
+
+:root,
+[data-theme="wasteland"] {
+  /* THEME 1: Wasteland Telemetry (Default)
+     Rugged, weathered road asphalt, warm graphite, amber hazard pips */
+  --bg-deep: #0e0f12;
+  --bg-primary: #14161b;
+  --bg-surface: #1a1d24;
+  --bg-surface-elevated: #222631;
+  --bg-surface-hover: #292e3c;
+  --border-dim: rgba(230, 235, 245, 0.08);
+  --border-bright: rgba(230, 235, 245, 0.16);
+  --border-accent: #d97706;
+
+  /* Typography */
+  --text-primary: #f0ede6;
+  --text-secondary: #a39e93;
+  --text-muted: #6e695f;
+  --text-accent: #f59e0b;
+
+  /* Survival Meters (Telemetry Style - Muted tones) */
+  --meter-health: #dc2626;
+  --meter-energy: #d97706;
+  --meter-hunger: #ea580c;
+  --meter-thirst: #0284c7;
+  --meter-fatigue: #7c3aed;
+  --meter-sanity: #db2777;
+
+  /* Rarities */
+  --rarity-common: #888580;
+  --rarity-uncommon: #16a34a;
+  --rarity-silver: #9ca3af;
+  --rarity-gold: #d97706;
+  --rarity-orange: #ea580c;
+  --rarity-purple: #9333ea;
+  --rarity-black: #4b5563;
+  --rarity-red: #dc2626;
+  --rarity-mythical: #ec4899;
+
+  /* Fonts & Radius */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-panel: 12px;
+}
+
+[data-theme="terminal"] {
+  /* THEME 2: Tactical CRT Terminal
+     High-tech military HUD, phosphor amber & green on deep carbon */
+  --bg-deep: #050706;
+  --bg-primary: #0a0d0a;
+  --bg-surface: #0f1410;
+  --bg-surface-elevated: #161e18;
+  --bg-surface-hover: #1e2920;
+  --border-dim: rgba(74, 222, 128, 0.12);
+  --border-bright: rgba(74, 222, 128, 0.28);
+  --border-accent: #22c55e;
+
+  /* Typography */
+  --text-primary: #dcfce7;
+  --text-secondary: #86efac;
+  --text-muted: #3b734c;
+  --text-accent: #4ade80;
+
+  /* Survival Meters */
+  --meter-health: #ef4444;
+  --meter-energy: #eab308;
+  --meter-hunger: #f97316;
+  --meter-thirst: #06b6d4;
+  --meter-fatigue: #a855f7;
+  --meter-sanity: #ec4899;
+
+  /* Rarities */
+  --rarity-common: #6b7280;
+  --rarity-uncommon: #22c55e;
+  --rarity-silver: #94a3b8;
+  --rarity-gold: #eab308;
+  --rarity-orange: #f97316;
+  --rarity-purple: #a855f7;
+  --rarity-black: #475569;
+  --rarity-red: #ef4444;
+  --rarity-mythical: #f43f5e;
+
+  --font-sans: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-panel: 6px;
+}
+
+[data-theme="graphite"] {
+  /* THEME 3: Clean Graphite Minimalist
+     Unslop pure graphite ramp, crisp hairline borders, cobalt blue accent */
+  --bg-deep: #0f0f10;
+  --bg-primary: #141415;
+  --bg-surface: #19191b;
+  --bg-surface-elevated: #232325;
+  --bg-surface-hover: #2c2c2f;
+  --border-dim: rgba(255, 255, 255, 0.08);
+  --border-bright: rgba(255, 255, 255, 0.16);
+  --border-accent: #3b82f6;
+
+  /* Typography */
+  --text-primary: #ededed;
+  --text-secondary: #a1a1a6;
+  --text-muted: #6b6b72;
+  --text-accent: #3b82f6;
+
+  /* Survival Meters */
+  --meter-health: #e5484d;
+  --meter-energy: #f59e0b;
+  --meter-hunger: #ea580c;
+  --meter-thirst: #0284c7;
+  --meter-fatigue: #8b5cf6;
+  --meter-sanity: #d946ef;
+
+  /* Rarities */
+  --rarity-common: #71717a;
+  --rarity-uncommon: #22c55e;
+  --rarity-silver: #a1a1aa;
+  --rarity-gold: #eab308;
+  --rarity-orange: #f97316;
+  --rarity-purple: #a855f7;
+  --rarity-black: #52525b;
+  --rarity-red: #ef4444;
+  --rarity-mythical: #ec4899;
+
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-panel: 14px;
+}
+
+[data-theme="classic"] {
+  /* THEME 4: Classic Survivor (Refined with emojis intact)
+     The original rich RPG colors with clean spacing and polished radiuses */
   --bg-deep: #08090d;
   --bg-primary: #0f1118;
   --bg-surface: #171b26;
   --bg-surface-elevated: #202534;
+  --bg-surface-hover: #293043;
   --border-dim: #252b3d;
   --border-bright: #3c4663;
+  --border-accent: #60a5fa;
 
   /* Typography */
   --text-primary: #f0f3fa;
@@ -21,31 +165,28 @@
   --meter-fatigue: #8b5cf6;
   --meter-sanity: #ec4899;
 
-  /* Rarity Tokens (Audited Plan §Rarity colour tokens) */
+  /* Rarities */
   --rarity-common: #9d9d9d;
   --rarity-uncommon: #1eff00;
   --rarity-silver: #c0c0c0;
   --rarity-gold: #ffd700;
   --rarity-orange: #ff8c00;
   --rarity-purple: #a335ee;
-  --rarity-black: #4a4a6a;
-  --rarity-black-glow: #d8d8ff;
+  --rarity-black: #686894;
   --rarity-red: #ff2a2a;
   --rarity-mythical: #ff4fd8;
-  --rarity-mythical-gradient: linear-gradient(
-    90deg,
-    #ff0000,
-    #ff8c00,
-    #ffd700,
-    #1eff00,
-    #00bfff,
-    #a335ee
-  );
 
-  /* Fonts */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-panel: 10px;
 }
+
+/* ==========================================================================
+   BASE RESETS & 4PX RHYTHM
+   ========================================================================== */
 
 * {
   box-sizing: border-box;
@@ -60,6 +201,7 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
@@ -70,8 +212,8 @@ body {
 
 /* Custom Scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-deep);

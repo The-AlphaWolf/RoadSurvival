@@ -9,8 +9,9 @@ interface InventoryProps {
 }
 
 export const Inventory: React.FC<InventoryProps> = ({ onUpgradeItem, onOpenChest }) => {
-  const { gameState, isProcessingTurn } = useGameStore();
+  const { gameState, theme, isProcessingTurn } = useGameStore();
   const { inventory, player } = gameState;
+  const isClassic = theme === 'classic';
   const currentWeight = calculateInventoryWeight(inventory.items, inventory.chests);
 
   const canUseTalent = player.talent.charges > 0 && !isProcessingTurn;
@@ -18,23 +19,24 @@ export const Inventory: React.FC<InventoryProps> = ({ onUpgradeItem, onOpenChest
   return (
     <div className="panel-container" style={{ flex: 1 }}>
       <div className="panel-header">
-        <span>🎒 Inventory ({inventory.items.length})</span>
+        <span>{isClassic ? '🎒 ' : ''}Supplies & Gear ({inventory.items.length})</span>
         <span
           style={{
-            fontSize: '0.75rem',
-            color: currentWeight > inventory.maxCarryWeight ? '#ef4444' : '#9aa3be',
+            fontSize: '0.72rem',
+            color: currentWeight > inventory.maxCarryWeight ? 'var(--meter-health)' : 'var(--text-muted)',
+            fontFamily: 'var(--font-mono)',
           }}
         >
-          {currentWeight} / {inventory.maxCarryWeight} kg
+          {currentWeight}/{inventory.maxCarryWeight} kg
         </span>
       </div>
 
       <div className="panel-body">
         {/* Unopened Chests */}
         {inventory.chests.some((c) => !c.isOpened) && (
-          <div style={{ marginBottom: '14px' }}>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#ffd700', marginBottom: '6px' }}>
-              🎁 TREASURE CHESTS
+          <div style={{ marginBottom: '12px' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-accent)', marginBottom: '6px' }}>
+              {isClassic ? '🎁 ' : '● '}Treasure Chests
             </div>
             {inventory.chests
               .filter((c) => !c.isOpened)
@@ -45,25 +47,25 @@ export const Inventory: React.FC<InventoryProps> = ({ onUpgradeItem, onOpenChest
                   <div
                     key={chest.id}
                     className={`item-card ${chest.rarity}`}
-                    style={{ marginBottom: '6px', background: 'rgba(234, 179, 8, 0.08)' }}
+                    style={{ marginBottom: '6px' }}
                   >
                     <div>
-                      <div style={{ fontWeight: 600 }}>
-                        {rInfo.emoji} {chest.name}
+                      <div style={{ fontWeight: 500 }}>
+                        {isClassic ? `${rInfo.emoji} ` : ''}{chest.name}
                       </div>
-                      <div style={{ fontSize: '0.72rem', color: '#9aa3be' }}>
-                        {chest.isUpgraded ? '✨ Upgraded ✔' : 'Unopened starter chest'}
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                        {chest.isUpgraded ? 'Upgraded' : 'Unopened container'}
                       </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '6px' }}>
+                    <div style={{ display: 'flex', gap: '4px' }}>
                       {canUpgrade && (
                         <button
-                          className="btn btn-upgrade"
+                          className="btn btn-accent"
                           disabled={isProcessingTurn}
                           onClick={() => onUpgradeItem(chest.id, true)}
-                          title="Use 1 Upgrade Charge"
+                          title="Upgrade chest tier with SSS Talent"
                         >
-                          Upgrade ✨
+                          {isClassic ? 'Upgrade ✨' : 'Upgrade'}
                         </button>
                       )}
                       <button
@@ -71,7 +73,7 @@ export const Inventory: React.FC<InventoryProps> = ({ onUpgradeItem, onOpenChest
                         disabled={isProcessingTurn}
                         onClick={() => onOpenChest(chest.id)}
                       >
-                        Open 🎁
+                        {isClassic ? 'Open 🎁' : 'Open'}
                       </button>
                     </div>
                   </div>
@@ -80,9 +82,9 @@ export const Inventory: React.FC<InventoryProps> = ({ onUpgradeItem, onOpenChest
           </div>
         )}
 
-        {/* Inventory Items */}
-        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', marginBottom: '6px' }}>
-          ITEMS & SUPPLIES
+        {/* Inventory Items List */}
+        <div style={{ fontSize: '0.72rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
+          Manifest
         </div>
         <div className="inventory-grid">
           {inventory.items.map((item) => {
@@ -91,28 +93,30 @@ export const Inventory: React.FC<InventoryProps> = ({ onUpgradeItem, onOpenChest
 
             return (
               <div key={item.id} className={`item-card ${item.rarity}`}>
-                <div style={{ flex: 1, paddingRight: '8px' }}>
-                  <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                    <span>{rInfo.emoji}</span>
+                <div style={{ flex: 1, paddingRight: '6px' }}>
+                  <div style={{ fontWeight: 500, display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    {isClassic && <span>{rInfo.emoji}</span>}
                     <span>{item.name}</span>
                     {item.quantity > 1 && (
-                      <span style={{ color: '#60a5fa', fontSize: '0.75rem' }}>x{item.quantity}</span>
+                      <span style={{ color: 'var(--text-accent)', fontSize: '0.75rem', fontFamily: 'var(--font-mono)' }}>
+                        ×{item.quantity}
+                      </span>
                     )}
                   </div>
-                  <div style={{ fontSize: '0.7rem', color: '#9aa3be' }}>
-                    {item.weight}kg • {rInfo.name}
-                    {item.isUpgraded && ' • Upgraded ✔'}
+                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                    {item.weight} kg • {rInfo.name}
+                    {item.isUpgraded && ' • Upgraded'}
                   </div>
                 </div>
 
                 {canUpgrade && (
                   <button
-                    className="btn btn-upgrade"
+                    className="btn btn-accent"
                     disabled={isProcessingTurn}
                     onClick={() => onUpgradeItem(item.id, false)}
                     title="Upgrade this item using SSS Talent"
                   >
-                    Upgrade ✨
+                    {isClassic ? 'Upgrade ✨' : 'Upgrade'}
                   </button>
                 )}
               </div>
