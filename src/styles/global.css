@@ -1,0 +1,85 @@
+:root {
+  /* Dark Theme Palette */
+  --bg-deep: #08090d;
+  --bg-primary: #0f1118;
+  --bg-surface: #171b26;
+  --bg-surface-elevated: #202534;
+  --border-dim: #252b3d;
+  --border-bright: #3c4663;
+
+  /* Typography */
+  --text-primary: #f0f3fa;
+  --text-secondary: #9aa3be;
+  --text-muted: #646e8c;
+  --text-accent: #60a5fa;
+
+  /* Survival Meters */
+  --meter-health: #ef4444;
+  --meter-energy: #eab308;
+  --meter-hunger: #f97316;
+  --meter-thirst: #06b6d4;
+  --meter-fatigue: #8b5cf6;
+  --meter-sanity: #ec4899;
+
+  /* Rarity Tokens (Audited Plan §Rarity colour tokens) */
+  --rarity-common: #9d9d9d;
+  --rarity-uncommon: #1eff00;
+  --rarity-silver: #c0c0c0;
+  --rarity-gold: #ffd700;
+  --rarity-orange: #ff8c00;
+  --rarity-purple: #a335ee;
+  --rarity-black: #4a4a6a;
+  --rarity-black-glow: #d8d8ff;
+  --rarity-red: #ff2a2a;
+  --rarity-mythical: #ff4fd8;
+  --rarity-mythical-gradient: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff8c00,
+    #ffd700,
+    #1eff00,
+    #00bfff,
+    #a335ee
+  );
+
+  /* Fonts */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Menlo, Monaco, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  overflow-x: hidden;
+  height: 100vh;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
